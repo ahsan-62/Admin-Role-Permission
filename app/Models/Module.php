@@ -11,4 +11,12 @@ class Module extends Model
     use HasFactory,SoftDeletes;
 
     protected $guarded=['id'];
+
+    /*relationship with permissions */
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class);
+    }
+
+
 }
