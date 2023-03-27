@@ -15,7 +15,7 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $modules=Module::select(['id','module_name','updated_at'])->latest()->get();
+        $modules=Module::select(['id','module_name','module_slug','updated_at'])->latest()->get();
         // return $modules;
         return view('Admin.layouts.pages.module.index',compact('modules'));
     }
