@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Module;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ModuleStoreRequest;
+use Brian2694\Toastr\Facades\Toastr;
 
 class ModuleController extends Controller
 {
@@ -27,7 +30,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        //
+        return view('Admin.layouts.pages.module.create');
     }
 
     /**
@@ -36,9 +39,15 @@ class ModuleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ModuleStoreRequest $request)
     {
-        //
+        Module::updateOrCreate([
+            'module_name'=> $request->module_name,
+            'module_slug'=>Str::slug($request->module_name),
+
+        ]);
+        Toastr::success('Module Added Successfully');
+        return redirect()->route('module.index');
     }
 
     /**
@@ -60,7 +69,8 @@ class ModuleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $module=Module::find($id);
+        return view('Admin.layouts.pages.module.edit',compact('module'));
     }
 
     /**
@@ -70,9 +80,17 @@ class ModuleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ModuleStoreRequest $request, $id)
     {
-        //
+        // dd($request->all(),$id);
+        $module=Module::find($id);
+        $module->update([
+            'module_name'=> $request->module_name,
+            'module_slug'=>Str::slug($request->module_name),
+
+        ]);
+        Toastr::success('Module Updated Successfully');
+        return redirect()->route('module.index');
     }
 
     /**
@@ -83,6 +101,10 @@ class ModuleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $module=Module::find($id);
+        $module->delete();
+
+        Toastr::success('Module Deleted Successfully');
+        return redirect()->route('module.index');
     }
 }
