@@ -47,7 +47,7 @@ class PermissionController extends Controller
      */
     public function store(PermissionStoreRequest $request)
     {
-        // dd($request->all());
+        dd($request->all());
         Permission::updateOrCreate([
             'module_id'=>$request->module_id,
             'permission_name'=>$request->permission_name,
@@ -78,7 +78,9 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $permission=Permission::find($id);
+        $modules=Module::select(['id','module_name'])->get();
+        return view('Admin.layouts.pages.permission.edit',compact('modules','permission'));
     }
 
     /**
@@ -88,9 +90,19 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PermissionStoreRequest $request, $id)
     {
-        //
+        // dd($request->all());
+        $permission=Permission::find($id);
+        $permission->update([
+            'module_id'=>$request->module_id,
+            'permission_name'=>$request->permission_name,
+            'permission_slug'=>Str::slug($request->permission_name),
+
+        ]);
+
+        Toastr::success('Permission updated Successfully');
+        return redirect()->route('permission.index');
     }
 
     /**
