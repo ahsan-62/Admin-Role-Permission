@@ -40,7 +40,11 @@ Module Index
                             </button>
                             <div class="dropdown-menu">
                               <a class="dropdown-item" href="{{ route('module.edit',$module->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                              <a class="dropdown-item" href="#"><i class="bx bx-trash me-1"></i> Delete</a>
+                             <form action="{{ route('module.destroy',$module->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="dropdown-item show_confirm" href=""><i class="bx bx-trash me-1"></i> Delete</button>
+                            </form>
                             </div>
                           </div>
                         </td>
@@ -58,4 +62,35 @@ Module Index
 
 
 @push('admin_script')
+<script>
+$(document).ready(function(){
+
+    $('.show_confirm').click(function(event){
+        let form=$(this).closest('form');
+        event.preventDefault();
+
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();s
+                Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+                )
+            }
+            })
+
+    });
+});
+
+</script>
+
 @endpush
