@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Role;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\Permission;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
 
 class RoleController extends Controller
 {
@@ -40,9 +44,16 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleStoreRequest $request)
     {
-        dd($request->all());
+        Role::updateOrCreate([
+            'role_name'=>$request->role_name,
+            'role_slug'=>Str::slug($request->role_slug),
+            'role_note'=>$request->role_note,
+        ])->permissions()->sync($request->input('permissions',[]));
+
+        Toastr::success('Role Added Succesfully');
+        return redirect()->route('role.index');
     }
 
     /**
@@ -64,7 +75,10 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $role = Role::with(['permissions'])->find($id);
+        $modules = Module::with(['permissions:id,module_id,permission_name,permission_slug'])->select(['id', 'module_name'])->get();
+        return view('Admin.layouts.pages.role.edit', compact('modules', 'role'));
+
     }
 
     /**
@@ -74,9 +88,18 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RoleUpdateRequest $request, $id)
     {
-        //
+        $role = Role::find($id);
+        $role->update([
+            'role_name' => $request->role_name,
+            'role_slug' => Str::slug($request->role_name),
+            'role_note' => $request->role_note,
+        ]);
+        $role->permissions()->sync($request->input('permissions', []));
+
+        Toastr::success('Role updated Successfully');
+        return redirect()->route('role.index');
     }
 
     /**
@@ -87,6 +110,14 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role=Role::find($id);
+        if($role->is_deleteable){
+            $role->delete();
+            Toastr::success('Role deleted Successfully');
+            return redirect()->route('role.index');
+        }
+        Toastr::error("Role cann't be deleted!!!");
+        return redirect()->route('role.index');
+
     }
 }

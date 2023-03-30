@@ -13,7 +13,7 @@ class RoleStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class RoleStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'role_name'=>'required|unique:roles',
+            'role_note'=>'required|string|max:255',
+            'permissions'=>'required|array',
+            'permissions.*'=>'integer',
         ];
     }
 }
