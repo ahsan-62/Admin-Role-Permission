@@ -106,7 +106,7 @@
                 </li>
             </ul>
         </li>
-
+        @can('index-role')
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
@@ -125,6 +125,8 @@
                 </li>
             </ul>
         </li>
+        @endcan
+
 
     </ul>
 </aside>

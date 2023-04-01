@@ -18,10 +18,15 @@ Module Create
             <div class="card-body">
               <form action="{{ route('module.store') }}" method="post">
                 @csrf
-                <div class="mb-3">
+                <div class="mb-3 @error('module_name') is-invalid @enderror">
                   <label class="form-label" for="basic-default-fullname">Module Name</label>
                   <input type="text" name="module_name" class="form-control" id="basic-default-fullname" placeholder="Enter Module Name">
                 </div>
+                @error('module_name')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
                 <button type="submit" class="btn btn-primary">Add Module</button>
               </form>
             </div>
