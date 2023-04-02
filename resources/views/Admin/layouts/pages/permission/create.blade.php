@@ -28,10 +28,16 @@ Module Create
                         @endforeach
                     </select>
                   </div>
-                <div class="mb-3">
+                <div class="mb-3 @error('permission_name') is-invalid @enderror">
                   <label class="form-label" for="basic-default-fullname">Permission Name</label>
                   <input type="text" name="permission_name" class="form-control" id="basic-default-fullname" placeholder="Enter Permission Name">
                 </div>
+                @error('permission_name')
+                <span class="invalid-feedback" role="alert" >
+                    <strong>{{ $message }}</strong>
+                </span>
+
+                @enderror
                 <button type="submit" class="btn btn-primary">Add Module</button>
               </form>
             </div>

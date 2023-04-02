@@ -4,7 +4,7 @@
 @endpush
 
 @section('page_title')
-Role Index
+Module Index
 @endsection
 
 @section('admin_content')
@@ -12,58 +12,41 @@ Role Index
     <div class="col">
     <div class="card">
         <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="card-header">Permission</h5>
-        <a class="btn btn-primary me-4" href="{{ route('role.create') }}">Add new</a>
+        <h5 class="card-header">Module</h5>
+        <a class="btn btn-primary me-4" href="{{ route('user.create') }}">Add new</a>
     </div>
             <div class="table-responsive text-nowrap">
               <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>Role Name</th>
-                    <th>Role Slug</th>
-                    <th>Permission</th>
+                    <th>User Name</th>
+                    <th>User Email</th>
+                    <th>User Role</th>
                     <th>Updated at</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @forelse ($roles as $role)
+                    @forelse ($users as $user)
                     <tr>
                         <td><strong>{{ $loop->index+1 }}</strong></td>
-                        <td>{{ $role->role_name }}</td>
-                        <td>{{ $role->role_slug }}</td>
-                        <td>
-                            @foreach ($role->permissions->chunk(5) as $key=>$chunks)
-                            <div class="row">
-                                <div class="col">
-                                    @foreach ($chunks as $permission )
-                                    <span class="badge bg-success">{{ $permission->permission_slug }}</span>
-                                    @endforeach
-                                </div>
-
-                            </div>
-                            @endforeach
-                        </td>
-                        <td>{{ $role->updated_at->format('(D)-d-M-Y') }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->role->role_name }}</td>
+                        <td>{{ $user->updated_at->format('(D)-d-M-Y') }}</td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="{{ route('role.edit',$role->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-
-                              @if ($role->is_deleteable && Auth::user()->hasPermission('delete-role'))
-                              <form action="{{ route('role.destroy', $role->id) }}" method="POST">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" class="dropdown-item show_confirm" href="">
-                                      <i class="bx bx-trash me-1"></i>
-                                      Delete
-                                  </button>
-                              </form>
-                              @endif
+                              <a class="dropdown-item" href="{{ route('user.edit',$user->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                             <form action="{{ route('user.destroy',$user->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="dropdown-item show_confirm" href=""><i class="bx bx-trash me-1"></i> Delete</button>
+                            </form>
                             </div>
                           </div>
                         </td>

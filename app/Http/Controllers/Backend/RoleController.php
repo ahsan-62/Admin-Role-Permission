@@ -23,7 +23,7 @@ class RoleController extends Controller
     public function index()
     {
         Gate::authorize('index-role');
-        $roles=Role::with(['permissions:id,permission_name,permission_slug'])->select(['id','role_name','role_slug','role_note','updated_at'])->get();
+        $roles=Role::with(['permissions:id,permission_name,permission_slug'])->select(['id','is_deleteable','role_name','role_slug','role_note','updated_at'])->get();
         // return $roles;
         return view('Admin.layouts.pages.role.index',compact('roles'));
     }
@@ -113,6 +113,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        Gate::authorize('delete-role');
         $role=Role::find($id);
         if($role->is_deleteable){
             $role->delete();
