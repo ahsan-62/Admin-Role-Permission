@@ -47,7 +47,7 @@ class PermissionController extends Controller
      */
     public function store(PermissionStoreRequest $request)
     {
-        dd($request->all());
+       // dd($request->all());
         Permission::updateOrCreate([
             'module_id'=>$request->module_id,
             'permission_name'=>$request->permission_name,
@@ -113,6 +113,10 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $permissions=Permission::find($id);
+        $permissions->delete();
+
+        Toastr::warning('Permission Deleted Successfully');
+        return redirect()->route('permission.index');
     }
 }

@@ -69,7 +69,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -80,7 +80,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $users=User::find($id);
+        $roles=Role::select(['id','role_name'])->get();
+
+        return view('Admin.layouts.pages.users.edit',compact('roles','users'));
+
     }
 
     /**
@@ -92,7 +96,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $users=User::find($id);
+        $users->update([
+            'role_id'=>$request->role_id,
+            'name'=>$request->name,
+            'email'=>$request->email,
+        ]);
+        Toastr::success('Hi');
+        return redirect()->route('user.index');
     }
 
     /**
@@ -103,6 +114,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $users=User::find($id);
+        $users->delete();
+
+        Toastr::success('User Deleted Successfully');
+        return redirect()->route('user.index');
     }
 }

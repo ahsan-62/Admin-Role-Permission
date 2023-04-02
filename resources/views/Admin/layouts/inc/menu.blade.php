@@ -3,7 +3,7 @@
   <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="{{ route('home') }}" class="app-brand-link">
-            <span class="app-brand-logo demo">
+            {{-- <span class="app-brand-logo demo">
                 <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
                     <defs>
@@ -46,8 +46,8 @@
                         </g>
                     </g>
                 </svg>
-            </span>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2">Admin</span>
+            </span> --}}
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">CSE-PUST</span>
         </a>
 
         <a href="javascript:void(0);"
@@ -90,7 +90,7 @@
 
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <i class="menu-icon tf-icons bx bxs-message-square-minus"></i>
                 <div data-i18n="Account Settings">Permission Settings</div>
             </a>
             <ul class="menu-sub">
@@ -109,7 +109,7 @@
         @can('index-role')
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <i class="menu-icon tf-icons bx bxs-mask"></i>
                 <div data-i18n="Account Settings">Role Settings</div>
             </a>
             <ul class="menu-sub">
@@ -126,6 +126,25 @@
             </ul>
         </li>
         @endcan
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bx-user'></i>
+                <div data-i18n="Account Settings">User Settings</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('user.create') }}" class="menu-link">
+                        <div data-i18n="Account">create</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{ route('user.index') }}" class="menu-link">
+                        <div data-i18n="Notifications">List</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
     </ul>
