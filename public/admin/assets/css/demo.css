@@ -4,18 +4,18 @@
 ******************************************************************************/
 
 .menu .app-brand.demo {
-  height: 64px;
-  margin-top: 12px;
+  height: 80px;
+  margin-top: 24px;
 }
 
-.app-brand-logo.demo svg {
-  width: 22px;
-  height: 38px;
+.app-brand-logo.demo img {
+  width: 100px;
+  height: 80px;
 }
 
 .app-brand-text.demo {
-  font-size: 1.75rem;
-  letter-spacing: 5px;
+  font-size: 1rem;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
 }
 
