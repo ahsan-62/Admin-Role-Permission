@@ -32,9 +32,9 @@ class RoleSeeder extends Seeder
 
         //1. Create a user role
         Role::updateOrCreate([
-            'role_name' => 'User',
-            'role_slug' => 'user',
-            'role_note' => 'user has limited permissions',
+            'role_name' => 'Customer',
+            'role_slug' => 'customer',
+            'role_note' => 'Customer has limited permissions',
             'is_deleteable' => true,
         ]);
     }

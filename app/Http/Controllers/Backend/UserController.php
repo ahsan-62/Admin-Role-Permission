@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserStoreRequest;
+use Brian2694\Toastr\Facades\Toastr;
 
 class UserController extends Controller
 {
@@ -15,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users=User::with(['role:id,role_name,role_slug'])->select(['id','role_id','name','email','updated_at'])->get();
+        $users=User::with(['role:id,role_name,role_slug'])->select(['id','role_id','name','email','updated_at'])->latest()->paginate();
         // return $users;
         return view('Admin.layouts.pages.users.index',compact('users'));
     }
@@ -27,7 +32,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('Admin.layouts.pages.users.create');
+        $roles=Role::select(['id','role_name'])->get();
+
+        return view('Admin.layouts.pages.users.create',compact('roles'));
     }
 
     /**
@@ -36,9 +43,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        //
+
+        // dd($request->all());
+        User::updateOrCreate([
+            'role_id' => $request->role_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'email_verified_at' => now(),
+            'password' => Hash::make($request->password),
+            'remember_token' => Str::random(10),
+        ]);
+
+
+        Toastr::success('User created Successfully');
+        return redirect()->route('user.index');
     }
 
     /**
