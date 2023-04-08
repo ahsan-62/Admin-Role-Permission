@@ -16,8 +16,9 @@
     <!-- Main JS -->
     <script src="{{ asset('admin') }}/assets/js/main.js"></script>
 
-    @stack('admin_script')
+
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
 
     @stack('admin_script')

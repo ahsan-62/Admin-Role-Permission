@@ -7,9 +7,11 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserStoreRequest;
-use Brian2694\Toastr\Facades\Toastr;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -20,9 +22,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users=User::with(['role:id,role_name,role_slug'])->select(['id','role_id','name','email','updated_at'])->latest()->paginate();
-        // return $users;
-        return view('Admin.layouts.pages.users.index',compact('users'));
+        Gate::authorize('index-user');
+        $users = User::with(['role:id,role_name,role_slug'])
+        ->select(['id', 'role_id', 'name', 'email','is_active', 'updated_at'])
+        ->latest()
+        ->paginate();
+        return view('Admin.layouts.pages.users.index', compact('users'));
     }
 
     /**
@@ -32,8 +37,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles=Role::select(['id','role_name'])->get();
-
+        Gate::authorize('create-user');
+        $roles = Role::select(['id', 'role_name'])->get();
         return view('Admin.layouts.pages.users.create',compact('roles'));
     }
 
@@ -45,8 +50,7 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-
-        // dd($request->all());
+        Gate::authorize('create-user');
         User::updateOrCreate([
             'role_id' => $request->role_id,
             'name' => $request->name,
@@ -58,7 +62,7 @@ class UserController extends Controller
 
 
         Toastr::success('User created Successfully');
-        return redirect()->route('user.index');
+        return redirect()->route('users.index');
     }
 
     /**
@@ -69,7 +73,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -80,11 +84,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $users=User::find($id);
-        $roles=Role::select(['id','role_name'])->get();
-
-        return view('Admin.layouts.pages.users.edit',compact('roles','users'));
-
+        Gate::authorize('edit-user');
+        $user = User::find($id);
+        $roles = Role::select(['id', 'role_name'])->get();
+        return view('Admin.layouts.pages.users.edit',compact('roles', 'user'));
     }
 
     /**
@@ -94,16 +97,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-        $users=User::find($id);
-        $users->update([
-            'role_id'=>$request->role_id,
-            'name'=>$request->name,
-            'email'=>$request->email,
+        Gate::authorize('edit-user');
+        $user = User::find($id);
+        $user->update([
+            'role_id' => $request->role_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
-        Toastr::success('Hi');
-        return redirect()->route('user.index');
+
+
+        Toastr::success('User updated Successfully');
+        return redirect()->route('users.index');
+
     }
 
     /**
@@ -114,10 +122,28 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $users=User::find($id);
-        $users->delete();
+        Gate::authorize('delete-user');
+        $user = User::find($id);
+        $user->delete();
+        Toastr::success('User deleted Successfully');
+        return redirect()->route('users.index');
+    }
 
-        Toastr::success('User Deleted Successfully');
-        return redirect()->route('user.index');
+
+    public function checkActive($user_id)
+    {
+        $user = User::find($user_id);
+        // toogle the is-active
+        if($user->is_active == 1){
+            $user->is_active = 0;
+        }else{
+            $user->is_active = 1;
+        }
+
+        $user->update();
+        return response()->json([
+                'type' => 'success',
+                'message' => 'Status Updated'
+        ]);
     }
 }

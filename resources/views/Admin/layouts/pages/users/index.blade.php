@@ -26,10 +26,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Last Updated</th>
                             <th>User Role</th>
+                            <th>User Image</th>
                             <th>User Name</th>
                             <th>User Email</th>
-                            <th>Last Updated</th>
+                            <th>User Active</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -37,10 +39,26 @@
                         @forelse ($users as $user)
                         <tr>
                             <td><strong>{{ $users->firstItem() + $loop->index }}</strong></td>
+                            <td>{{ $user->updated_at->format('d-M-Y') }}</td>
                             <td>{{ $user->role->role_name }}</td>
+                            <td>
+                                @if ($user->user_image)
+                                <img src="{{ asset('uploads/profile_images/') }}/{{ $user->user_image }}" alt
+                                class="w-px-40 h-auto rounded-circle" />
+                                @else
+                                <img src="{{ asset('admin') }}/assets/img/avatars/1.png" alt
+                                    class="w-px-40 h-auto rounded-circle" />
+                                @endif
+                            </td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->updated_at->format('d-M-Y') }}</td>
+                            <td class="">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input toggle-class" type="checkbox" role="switch"
+                                    data-id="{{ $user->id }}"
+                                    id="user-{{ $user->id }}" {{ $user->is_active ? 'checked':'' }}>
+                                </div>
+                            </td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -109,33 +127,33 @@ $(document).ready(function(){
         })
     });
 
-    // $('.toggle-class').change(function(){
+    $('.toggle-class').change(function(){
 
-    //     var is_active = $(this).prop('checked') == true ? 1 : 0 ;
-    //     var item_id = $(this).data('id');
-    //     //console.log(is_active, item_id); // for debug purpose
+        var is_active = $(this).prop('checked') == true ? 1 : 0 ;
+        var item_id = $(this).data('id');
+        //console.log(is_active, item_id); // for debug purpose
 
-    //     $.ajax({
-    //         type: "GET",
-    //         dataType: "json",
-    //         url: '/admin/check/user/is_active/'+item_id,
-    //         success: function(response){
-    //             console.log(response);
-    //             Swal.fire({
-    //                 title: `${ response.message}`,
-    //                 text: `${ response.message }`,
-    //                 icon: `${response.type}`,
-    //             })
-    //         },
-    //         errro: function(err){
-    //             if(err){
-    //                 console.log(err);
-    //             }
-    //         }
-    //     });
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '/admin/check/user/is_active/'+item_id,
+            success: function(response){
+                console.log(response);
+                Swal.fire({
+                    title: `${ response.message}`,
+                    text: `${ response.message }`,
+                    icon: `${response.type}`,
+                })
+            },
+            errro: function(err){
+                if(err){
+                    console.log(err);
+                }
+            }
+        });
 
 
-    // });
+    });
 
 });
 </script>
