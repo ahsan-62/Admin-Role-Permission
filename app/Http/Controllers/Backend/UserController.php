@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         Gate::authorize('index-user');
         $users = User::with(['role:id,role_name,role_slug'])
-        ->select(['id', 'role_id', 'name', 'email','is_active', 'updated_at'])
+        ->select(['id', 'role_id', 'name', 'email','is_active','user_image' ,'updated_at'])
         ->latest()
         ->paginate();
         return view('Admin.layouts.pages.users.index', compact('users'));
@@ -62,7 +62,7 @@ class UserController extends Controller
 
 
         Toastr::success('User created Successfully');
-        return redirect()->route('users.index');
+        return redirect()->route('user.index');
     }
 
     /**
@@ -110,7 +110,7 @@ class UserController extends Controller
 
 
         Toastr::success('User updated Successfully');
-        return redirect()->route('users.index');
+        return redirect()->route('user.index');
 
     }
 
@@ -124,9 +124,14 @@ class UserController extends Controller
     {
         Gate::authorize('delete-user');
         $user = User::find($id);
+        if($user->user_image != null){
+            // delete old photo
+            $old_photo_path = 'public/uploads/profile_images/'.$user->user_image;
+            unlink(base_path($old_photo_path));
+        }
         $user->delete();
         Toastr::success('User deleted Successfully');
-        return redirect()->route('users.index');
+        return redirect()->route('user.index');
     }
 
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Backend\ModuleController;
 use App\Http\Controllers\Backend\PermissionController;
+use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -38,4 +39,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::get('check/user/is_active/{user_id}',[UserController::class,'checkActive'])->name('user.is_active.ajax');
 
     Route::resource('/user',UserController::class);
+
+
+    Route::get('update-profile',[ProfileController::class,'getUpdateProfile'])->name('getupdate.profile');
+    Route::post('update-profile',[ProfileController::class,'updateProfile'])->name('postupdate.profile');
+
 });
