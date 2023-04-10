@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('page_title');
             $table->string('page_slug');
+            $table->string('page_image')->nullable();
             $table->text('page_short')->nullable()->comment('short description');
             $table->longText('page_long')->nullable()->comment('long description');
             $table->text('meta_title')->nullable();
