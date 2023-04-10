@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\BackupController;
 use App\Http\Controllers\Backend\ModuleController;
 use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\PermissionController;
@@ -40,6 +41,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::resource('/permission',PermissionController::class);
     Route::resource('/role', RoleController::class);
     Route::resource('/page', PageController::class);
+    Route::resource('/backup',BackupController::class);
+    Route::get('/backup/download/{file_name}', [BackupController::class, 'download'])->name('backup.download');
 
     //is_active Route Ajax
     Route::get('check/user/is_active/{user_id}',[UserController::class,'checkActive'])->name('user.is_active.ajax');
