@@ -127,7 +127,7 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bxs-mask"></i>
-                <div data-i18n="Account Settings">Backup</div>
+                <div data-i18n="Account Settings">Backup Management</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
@@ -143,6 +143,20 @@
             </ul>
         </li>
         @endcan
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-cog"></i>
+                <div data-i18n="Account Settings">System Setting Management</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="{{ route('settings.general') }}" class="menu-link">
+                        <div data-i18n="Account">General Setting</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
     </ul>
 </aside>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Forntend\FrontendController;
 use Illuminate\Support\Facades\Auth;
@@ -56,5 +57,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
     Route::get('update-password', [ProfileController::class, 'getUpdatePassword'])->name('getupdate.password');
     Route::post('update-password', [ProfileController::class, 'updatePassword'])->name('postupdate.password');
+
+
+
+    Route::group(['as'=>'settings.','prefix'=>'settings'],function(){
+
+        Route::get('general',[SettingController::class,'general'])->name('general');
+        Route::post('general',[SettingController::class,'generalUpdate'])->name('general.update');
+
+    });
 
 });
