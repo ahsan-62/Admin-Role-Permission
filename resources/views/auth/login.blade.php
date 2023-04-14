@@ -64,6 +64,20 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="row mt-5">
+                            <div class="col-md-4 offset-md-1">
+                                <a href="{{ route('login.provider', ['provider' => 'github']) }}" class="btn btn-secondary">
+                                    <i class='bx bxl-github'></i> Login With Github
+                                </a>
+                            </div>
+                            <div class="col-md-4 offset-md-1">
+                                <a href="{{ route('login.provider', ['provider' => 'google']) }}" class="btn btn-danger">
+                                    <i class='bx bxl-google-plus'></i> Login With Google
+                                </a>
+                            </div>
+
+                        </div>
                     </form>
                 </div>
             </div>
